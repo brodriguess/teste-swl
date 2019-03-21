@@ -1,0 +1,77 @@
+{# templates/chili/homepage.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{% block title %}Chili Motocicletas{% endblock %}</title>
+
+{% block stylesheets %}
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+{% endblock %}
+</head>
+<body>
+
+  <nav>
+    <div class="inner">
+      <img src="{{ asset('img/chilimotos.png') }}" />
+      <ul>
+        <li>Home</li>
+        <li>Motocicletas</li>
+        <li>Acessórios</li>
+        <li>Peças</li>
+        <li>Mecânica</li>
+        <li>Exposição</li>
+        <li>Contato</li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="inner column">
+
+      <div class="infobar">
+        <span>Exibindo de {{ begin + 1 }} a {% if (begin + page ) > max %} {{ max + 1 }} {% else %} {{ begin + page }} {% endif %} de um total de {{ max + 1 }} motocicletas</span>
+      </div>
+
+      <div class="showroom">
+          {% for moto in motorcycles|slice(begin, page) %}
+        <div class="item">
+          <div>
+            {% set img_url = 'img/' ~ moto.img %}
+            <img src="{{ asset(img_url) }}">
+          </div>
+          <div class="description">
+              {% if moto.stock > 0 %}
+                <span class="available"> Disponível </span>
+              {% else %}
+                <span class="outofstock"> Esgotada </span>
+              {% endif %}
+              <span class="brand">{{ moto.brand }}</span>
+              <span class="model">{{ moto.motorcycle }}</span>
+              <span class="year">{{ moto.year }}</span>
+              <span class="km">{{ moto.km }} km</span>          
+
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <div class="navigation">
+        {% if begin == 0 %}
+       
+        {% elseif begin-page < 1 %}
+          <a href="?s=0"> << </a> 
+        {% else %}
+          <a href="?s={{begin-page-1}}"> << </a>
+        {% endif %}
+
+        {% if begin+page < max + 1 %}
+          <a href="?s={{begin+page}}"> >> </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+</body>
